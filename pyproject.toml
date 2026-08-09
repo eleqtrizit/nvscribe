@@ -35,7 +35,7 @@ override-dependencies = [
 scribe = "scribe:main"
 
 [dependency-groups]
-dev = ["pytest>=8.0", "ruff>=0.9", "ty>=0.0.14"]
+dev = ["pytest>=8.0", "ruff>=0.9", "ty>=0.0.65"]
 
 [tool.ruff]
 target-version = "py311"
