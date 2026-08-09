@@ -1,0 +1,74 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "scribe"
+version = "0.1.0"
+description = "Local transcription and speaker diarization with NeMo parakeet and senko on NVIDIA GPUs"
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.11"
+dependencies = [
+    "nemo_toolkit[asr]>=2.4",
+    # The "nvidia-windows" extra selects the GPU torch (cu129, Blackwell-ready)
+    # + pyannote-audio stack WITHOUT kaldifeat/RAPIDS, which lack aarch64
+    # wheels. The neural diarization models still run on the CUDA GPU; only
+    # fbank extraction and clustering fall back to CPU (senko's documented
+    # behavior when kaldifeat is absent).
+    "senko[nvidia-windows] @ git+https://github.com/narcotic-sh/senko.git@40250276a691489786bd20bbebffa609dbf5acb0",  # 2026-01-02
+]
+
+[tool.hatch.metadata]
+allow-direct-references = true  # required for senko git dep; remove if senko publishes to PyPI
+
+[tool.uv]
+# torch 2.8.0+cu129 declares `triton; sys_platform == 'linux'` without an arch
+# qualifier, so uv tries to install triton on aarch64 — but triton has no
+# aarch64 wheels. triton is only needed for torch.compile/inductor (not for
+# inference), so scope it to x86_64. See https://github.com/pytorch/pytorch .
+override-dependencies = [
+    "triton; platform_machine == 'x86_64'",
+]
+
+[project.scripts]
+scribe = "scribe:main"
+
+[dependency-groups]
+dev = ["pytest>=8.0", "ruff>=0.9", "ty>=0.0.14"]
+
+[tool.ruff]
+target-version = "py311"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["ALL"]
+ignore = [
+    "COM812",  # trailing comma missing — conflicts with ruff formatter
+    "ISC001",  # implicit string concat — conflicts with ruff formatter
+    "D203",    # blank line before class — incompatible with D211
+    "D213",    # multi-line-summary-second-line — incompatible with D212
+    "FIX",     # fixme/todo markers — not applicable
+    "TD",      # todo comment format — not applicable
+    "TRY003",  # long exception messages — conflicts with EM pattern
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**/*.py" = [
+    "ANN",      # type annotations not required in tests
+    "D",        # docstrings not required in tests
+    "S101",     # assert is standard in pytest
+    "PLR2004",  # magic values are standard in test assertions
+]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ty.environment]
+python-version = "3.11"
+
+[tool.ty.rules]
+all = "error"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

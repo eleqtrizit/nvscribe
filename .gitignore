@@ -1,0 +1,16 @@
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+.env
+.DS_Store
+.ruff_cache/
+.pytest_cache/
+dist/
+*.egg-info/
+/*.json
+
+# Local agent / scratch artifacts
+/.pi/
+*mp3
+*txt
