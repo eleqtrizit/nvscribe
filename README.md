@@ -10,13 +10,24 @@
 >
 > **Please go star and credit the original repository:
 > <https://github.com/trailofbits/scribe>.** This fork only adapts that
-> work to run natively on NVIDIA GPUs (and specifically on the
+> work to run natively on NVIDIA GPUs (including the
 > NVIDIA DGX Spark), by swapping the Apple/MLX transcription backend
 > for NVIDIA NeMo + Parakeet and the macOS-native diarization for the
 > senko GPU stack. All credit for the overall architecture, the
 > parallel-loading pipeline, the merging logic, the CLI, the tests,
 > and the documentation belongs to the original authors. Thank you,
 > Trail of Bits.
+
+---
+
+## Quick install
+
+```sh
+uv tool install https://github.com/eleqtrizit/nvscribe.git
+```
+
+Then run `scribe` from anywhere. See [Requirements](#requirements) below
+for prerequisites (NVIDIA GPU, Linux, ffmpeg).
 
 ---
 
