@@ -29,6 +29,15 @@ uv tool install https://github.com/eleqtrizit/nvscribe.git
 Then run `scribe` from anywhere. See [Requirements](#requirements) below
 for prerequisites (NVIDIA GPU, Linux, ffmpeg).
 
+> **aarch64 / DGX Spark:** `uv tool install` from a git URL does not
+> apply `[tool.uv] override-dependencies` from `pyproject.toml`, so the
+> triton platform override is ignored. Use an overrides file instead:
+>
+> ```sh
+> echo 'triton; platform_machine == "x86_64"' > overrides.txt
+> uv tool install --overrides overrides.txt https://github.com/eleqtrizit/nvscribe.git
+> ```
+
 ---
 
 Local transcription and speaker diarization running entirely on
