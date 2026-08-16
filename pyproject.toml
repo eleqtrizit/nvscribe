@@ -10,7 +10,7 @@ readme = "README.md"
 license = "MIT"
 requires-python = ">=3.11"
 dependencies = [
-    "nemo_toolkit[asr]>=2.4",
+    "nemo_toolkit[asr]>=3.0.0",
     # The "nvidia-windows" extra selects the GPU torch (cu129, Blackwell-ready)
     # + pyannote-audio stack WITHOUT kaldifeat/RAPIDS, which lack aarch64
     # wheels. The neural diarization models still run on the CUDA GPU; only
